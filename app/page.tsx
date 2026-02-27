@@ -14,7 +14,8 @@ interface Article {
 }
 
 export default function Page() {
-  const ADMIN_PASSWORD = "100321227";
+  // Admin heslo je nyní ověřováno serverově přes API route (/api/admin-login)
+  // Heslo musí být nastaveno jako environment proměnná na Vercelu: ADMIN_PASSWORD
 
   const [activeSection, setActiveSection] = useState<string>("main");
   const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
@@ -119,11 +120,22 @@ export default function Page() {
     setSelectedArticleId(selectedArticleId === id ? null : id);
   };
 
-  const handleLogin = () => {
-    if (passwordInput === ADMIN_PASSWORD) {
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: passwordInput }),
+      });
+
+      if (!res.ok) {
+        alert("Nesprávné heslo");
+        return;
+      }
+
       setIsAdminAuthenticated(true);
-    } else {
-      alert("Nesprávné heslo");
+    } catch (err) {
+      alert("Chyba připojení k serveru");
     }
   };
 
@@ -264,6 +276,65 @@ export default function Page() {
               <button onClick={() => setIsAdminOpen(!isAdminOpen)} className="bg-blue-700 text-white px-4 py-2 rounded-lg">Admin</button>
             </div>
 
+            {/* ADMIN LOGIN */}
+            {isAdminOpen && !isAdminAuthenticated && (
+              <div className="space-y-3 bg-white p-4 rounded-xl shadow">
+                <input
+                  type="password"
+                  placeholder="Zadejte heslo"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
+                <button
+                  onClick={handleLogin}
+                  className="bg-green-600 text-white px-4 py-2 rounded"
+                >
+                  Přihlásit
+                </button>
+              </div>
+            )}
+
+            {/* ADMIN PANEL */}
+            {isAdminOpen && isAdminAuthenticated && (
+              <form onSubmit={handleAddOrUpdateArticle} className="space-y-4 bg-white p-6 rounded-xl shadow">
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Název článku"
+                  value={newArticle.title}
+                  onChange={handleArticleChange}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+                <input
+                  type="text"
+                  name="category"
+                  placeholder="Kategorie"
+                  value={newArticle.category}
+                  onChange={handleArticleChange}
+                  className="w-full border p-2 rounded"
+                />
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
+                {newArticle.image && (
+                  <img src={newArticle.image} className="max-h-48 rounded" />
+                )}
+                <textarea
+                  name="content"
+                  rows={4}
+                  placeholder="Obsah článku"
+                  value={newArticle.content}
+                  onChange={handleArticleChange}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+                <button type="submit" className="bg-blue-700 text-white px-4 py-2 rounded">
+                  {editingId ? "Uložit změny" : "Přidat článek"}
+                </button>
+              </form>
+            )}
+
+            {/* ARTICLES LIST */}
             {filteredArticles.map((article) => {
               const isOpen = selectedArticleId === article.id;
               const preview = article.content.slice(0, 120) + "...";
@@ -281,6 +352,13 @@ export default function Page() {
                     {article.image && isOpen && <img src={article.image} className="my-4 rounded" />}
                     <p>{isOpen ? article.content : preview}</p>
                   </div>
+
+                  {isAdminAuthenticated && (
+                    <div className="flex gap-4 mt-2 text-sm">
+                      <button onClick={() => handleEdit(article)} className="text-blue-700">Upravit</button>
+                      <button onClick={() => handleDelete(article.id)} className="text-red-600">Smazat</button>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
