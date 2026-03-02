@@ -169,8 +169,6 @@ export default function Page() {
       {/* HEADER */}
       <header className="relative w-full h-[420px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
         <img src="/logo.png" alt="Respekt ke škole znak" className="absolute inset-0 w-full h-full object-contain opacity-20" />
-        
-
         {/* Facebook Icon */}
         <a
           href="https://www.facebook.com/profile.php?id=61587466977553"
