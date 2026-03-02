@@ -175,6 +175,25 @@ export default function Page() {
           </h1>
           <p className="mt-4 text-white/80 text-lg">Moderní prostředí. Odpovědná budoucnost.</p>
         </div>
+
+        {/* Facebook Icon */}
+        <a
+          href="https://www.facebook.com/profile.php?id=61587466977553"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute right-6 top-6 bg-white/20 hover:bg-white/30 transition backdrop-blur-md p-3 rounded-full shadow-lg"
+          aria-label="Facebook stránka"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="white"
+            className="w-6 h-6"
+          >
+            <path d="M22 12a10 10 0 10-11.5 9.9v-7H7.9v-2.9h2.6V9.6c0-2.6 1.6-4 3.9-4 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.3 0-1.7.8-1.7 1.6v1.9h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z" />
+          </svg>
+        </a>
+        </div>
       </header>
 
       {/* NAVIGATION */}
