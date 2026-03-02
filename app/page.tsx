@@ -193,7 +193,6 @@ export default function Page() {
             <path d="M22 12a10 10 0 10-11.5 9.9v-7H7.9v-2.9h2.6V9.6c0-2.6 1.6-4 3.9-4 1.1 0 2.2.2 2.2.2v2.4h-1.3c-1.3 0-1.7.8-1.7 1.6v1.9h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z" />
           </svg>
         </a>
-        </div>
       </header>
 
       {/* NAVIGATION */}
